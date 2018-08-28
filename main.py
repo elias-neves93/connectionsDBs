@@ -43,11 +43,9 @@ class Query(object):
     def query(self):
         return self.__query
 
-def query_mongo(**kwargs):
 
-    connection = pymongo.MongoClient("mongodb://{}".format(kwargs['address']))
 
-    db = kwargs['db']
+
 
 
 
@@ -75,7 +73,24 @@ def main():
     # create a Object
     query = Query(db, address, user, password, database, query)
 
-    query_mongo(db=query.db, address=query.address, user=query.user, password=query.password, database=query.database, query=query.query)
+    if query.db == 'mongodb':
+        #with open(query.query, "r") as f:
+
+        query = {'name': 'Elias'}
+        connection = pymongo.MongoClient("mongodb://127.0.0.1")
+        db = connection.test
+        names = db.names
+
+        try:
+            cursor = names.find(query).count()
+        except Exception as e:
+            print ("Unexpected error:", type(e), e)
+
+        print(cursor)
+        #for i in cursor:
+        #    print (i)
+
+    
 
 if __name__ == "__main__":
     main()
